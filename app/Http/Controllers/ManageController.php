@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ManageController extends Controller
 {
@@ -40,9 +41,21 @@ class ManageController extends Controller
      * @param  \App\Models\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function show(Item $item)
+    public function show(Request $request)
     {
-        //
+        $start_date = $request->input("start_date");
+        $last_date = $request->input("last_date");
+        $query = Item::query();
+
+        if (!empty($start_date)) {
+            $query->whereDate("buy_date", ">=", Carbon::parse($start_date));
+        }
+        if (!empty($last_date)) {
+            $query->whereDate("buy_date", ">=", Carbon::parse($last_date));
+        }
+        return redirect('/')
+        ->with('buy_date',$start_date)
+        ->with('buy_date',$last_date);
     }
 
     /**
