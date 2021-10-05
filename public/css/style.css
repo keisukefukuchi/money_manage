@@ -1,0 +1,27 @@
+.header_title {
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.register {
+    width: 60%;
+}
+.search {
+    width: 40%;
+}
+.border {
+    border-bottom: 1px solid #000;
+}
+main {
+    width: 80%;
+    margin: 0 auto;
+}
