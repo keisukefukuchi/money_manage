@@ -17,7 +17,7 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->string('content');
             $table->integer('price');
-            $table->date('buy_date');
+            $table->timestamp('buy_date')->useCurrent()->nullable();
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
         });

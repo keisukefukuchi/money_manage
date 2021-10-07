@@ -15,7 +15,9 @@ class ManageController extends Controller
      */
     public function index()
     {
-        $items = Item::all();
+
+        $items = Item::Paginate(10);
+        $items = Item::where('buy_date',$items)->orderby('buy_date','desc')->get();
         return view('manage',['items' => $items]);
     }
 
@@ -43,6 +45,7 @@ class ManageController extends Controller
      */
     public function show(Request $request)
     {
+
         $start_date = $request->input("start_date");
         $last_date = $request->input("last_date");
         $query = Item::query();
@@ -53,9 +56,10 @@ class ManageController extends Controller
         if (!empty($last_date)) {
             $query->whereDate("buy_date", ">=", Carbon::parse($last_date));
         }
-        return redirect('/')
-        ->with('buy_date',$start_date)
-        ->with('buy_date',$last_date);
+        $items = $query->paginate(10);
+        return view('manage')->with('items',$items)
+        ->with('start_date',$start_date)
+        ->with('last_date',$last_date);
     }
 
     /**
