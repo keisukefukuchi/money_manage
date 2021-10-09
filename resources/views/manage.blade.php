@@ -45,9 +45,10 @@
                     </div>
                 </form>
             </div>
-            <form class="search" action="/manage/search" method="post">
+            <form class="search" action="/" method="get">
                 @csrf
-                <input type="date" id="start_date" name="start_date">〜<input type="date" id="last_date" name="last_date">
+                <input type="date" id="start_date" name="start_date"> 〜
+                <input type="date" id="last_date" name="last_date">
                 <button id="display_btn">指定期間表示</button>
             </form>
         </div>

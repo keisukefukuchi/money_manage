@@ -8,26 +8,25 @@ use Carbon\Carbon;
 
 class ManageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-
-        $items = Item::Paginate(10);
-        $items = Item::where('buy_date',$items)->orderby('buy_date','desc')->get();
+        if (!empty($request['start_date']) && !empty($request['last_date'])) {
+            //ハッシュタグの選択されたxxxx/xx/xx ~ xxxx/xx/xxのレポート情報を取得
+            $items = Item::getDate($request['start_date'], $request['last_date']);
+        }else {
+            //今月のデータだけを新しい順に表示
+            $start_month = Carbon::now()->startOfMonth();
+            $end_month = Carbon::now()->endOfMonth();
+            $items = Item::whereBetween('buy_date',[$start_month, $end_month])->latest('buy_date')->get();
+        }
         return view('manage',['items' => $items]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    // public function find()
+    // {
+    //     $items = Item::latest('buy_date')->get();
+    //     return view('manage', ['items' => $items]);
+    // }
+    public function create(Request $request)
     {
         $this->validate($request, Item::$rules);
         $todo = new Item();
@@ -36,40 +35,24 @@ class ManageController extends Controller
         $todo->fill($form)->save();
         return redirect('/');
     }
+    // public function search(Request $request)
+    // {
+    //     $start_date = $request->input("start_date");
+    //     $last_date = $request->input("last_date");
+    //     $query = Item::query();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
-    {
+    //     if (!empty($start_date)) {
+    //         $query->whereDate("buy_date", ">=", Carbon::parse($start_date));
+    //     }
+    //     if (!empty($last_date)) {
+    //         $query->whereDate("buy_date", ">=", Carbon::parse($last_date));
+    //     }
 
-        $start_date = $request->input("start_date");
-        $last_date = $request->input("last_date");
-        $query = Item::query();
-
-        if (!empty($start_date)) {
-            $query->whereDate("buy_date", ">=", Carbon::parse($start_date));
-        }
-        if (!empty($last_date)) {
-            $query->whereDate("buy_date", ">=", Carbon::parse($last_date));
-        }
-        $items = $query->paginate(10);
-        return view('manage')->with('items',$items)
-        ->with('start_date',$start_date)
-        ->with('last_date',$last_date);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Item $item)
+    //     return redirect('/')->with('items',$query)
+    //     ->with('start_date',$start_date)
+    //     ->with('last_date',$last_date);
+    // }
+    public function update(Request $request)
     {
         $this->validate($request, Item::$rules);
         $todo = Item::find($request->id);
@@ -78,14 +61,7 @@ class ManageController extends Controller
         $todo->fill($form)->save();
         return redirect('/');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Item  $item
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request,Item $item)
+    public function delete(Request $request)
     {
         Item::find($request->id)->delete();
         return redirect('/');

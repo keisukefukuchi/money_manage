@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Item extends Model
 {
     use HasFactory;
@@ -19,4 +20,10 @@ class Item extends Model
         'price' => 'required',
         'buy_date' => 'required',
     );
+    public static function getDate($start_date, $last_date)
+    {
+        //buy_dateがxxxx/xx/xx ~ xxxx/xx/xxのデータを取得
+        $items = Item::whereBetween('buy_date', [$start_date, $last_date])->latest('buy_date')->get();
+        return $items;
+    }
 }
