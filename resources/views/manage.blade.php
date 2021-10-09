@@ -45,7 +45,7 @@
                     </div>
                 </form>
             </div>
-            <form class="search" action="/" method="get">
+            <form class="search" action="/" method="post">
                 @csrf
                 <input type="date" id="start_date" name="start_date"> 〜
                 <input type="date" id="last_date" name="last_date">

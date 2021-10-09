@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/',[ManageController::class, 'index']);
+Route::post('/',[ManageController::class, 'index']);
 Route::post('/manage/create', [ManageController::class, 'create'])->name('manage.create');
 // Route::get('/manage/search', [ManageController::class, 'search'])->name('manage.search');
 Route::post('/manage/update', [ManageController::class, 'update'])->name('manage.update');
