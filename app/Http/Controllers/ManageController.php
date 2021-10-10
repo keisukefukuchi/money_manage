@@ -10,16 +10,25 @@ class ManageController extends Controller
 {
     public function index(Request $request)
     {
-        if (!empty($request['start_date']) && !empty($request['last_date'])) {
-            //ハッシュタグの選択されたxxxx/xx/xx ~ xxxx/xx/xxのレポート情報を取得
+        if (!empty($request->start_date) && !empty($request->last_date)) {
+            //ハッシュタグの選択されたxxxx/xx/xx ~ xxxx/xx/xxの情報を取得
             $items = Item::getDate($request['start_date'], $request['last_date']);
+            return view('manage',['items' => $items]);
         }else {
             //今月のデータだけを新しい順に表示
             $start_month = Carbon::now()->startOfMonth();
             $end_month = Carbon::now()->endOfMonth();
             $items = Item::whereBetween('buy_date',[$start_month, $end_month])->latest('buy_date')->get();
+            //金額の計算
+            $sum = $items->map(function($item) {
+                return $item->price;
+            })->sum();
+            $data = [
+                'items' => $items,
+                'sum' => $sum,
+            ];
+            return view('manage',$data);
         }
-        return view('manage',['items' => $items]);
     }
     // public function find()
     // {

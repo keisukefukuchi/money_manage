@@ -54,7 +54,7 @@
         </div>
         <div class="border"></div>
         <main>
-            <table>
+            <table class="table">
                 <tr>
                     <th class="interval">購入日</th>
                     <th class="interval">データ登録</th>
@@ -88,6 +88,10 @@
                     </tr>
                 @endforeach
             </table>
+            <div class="sum">
+                <h2>合計金額</h2>
+                <p>{{ $sum }}円</p>
+            </div>
         </main>
 
     </div>
