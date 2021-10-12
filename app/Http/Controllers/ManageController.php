@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Database\DBAL\TimestampType;
 
 class ManageController extends Controller
 {
@@ -66,6 +67,10 @@ class ManageController extends Controller
         $this->validate($request, Item::$rules);
         $todo = Item::find($request->id);
         $form = $request->all();
+        $date = isset($form['buy_date']);
+        $date = strtotime('Y-n-j H-i-s', $date);
+        dd($date);
+        $form['buy_date'] = $date;
         unset($form['_token_']);
         $todo->fill($form)->save();
         return redirect('/');

@@ -67,6 +67,11 @@
                         <form action="{{ route('manage.update', ['id' => $item->id]) }}" method="post">
                             @csrf
                             <td class="interval">
+                                <?php
+                                    $date = date_create($item->buy_date);
+                                    $date = date_format($date , 'Y年m月d日');
+                                    $item->buy_date = $date;
+                                ?>
                                 <input type="text" class="input-update" value="{{ $item->buy_date }}" name="buy_date" />
                             </td>
                             <td class="interval">

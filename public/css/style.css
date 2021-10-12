@@ -1,3 +1,7 @@
+body {
+    width: 1080px;
+    margin: 0 auto;
+}
 .header_title {
     text-align: center;
     margin-bottom: 100px;
